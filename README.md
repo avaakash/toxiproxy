@@ -61,6 +61,8 @@ stopping you from creating a client in any other language (see
       - [reset_peer](#reset_peer)
       - [slicer](#slicer)
       - [limit_data](#limit_data)
+      - [response_code](#response_code)
+      - [response_body](#response_body)
     - [HTTP API](#http-api)
       - [Proxy fields:](#proxy-fields)
       - [Toxic fields:](#toxic-fields)
@@ -445,6 +447,14 @@ Attributes:
 Closes connection when transmitted data exceeded limit.
 
  - `bytes`: number of bytes it should transmit before connection is closed
+
+#### response_code
+Changes the status code of the response.
+- `status_code`: status code to change to. Supports `200`, `201`, `202`, `301`, `302`, `303`, `400`, `401`, `403`, `404`, `500`, `501`, `502`, `503`, `504`
+
+#### response_body
+Changes the body of the response.
+- `body`: new body for the response. 
 
 ### HTTP API
 

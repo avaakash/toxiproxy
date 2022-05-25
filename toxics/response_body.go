@@ -45,5 +45,5 @@ func (t *HttpResponseBodyToxic) Pipe(stub *ToxicStub) {
 }
 
 func init() {
-	Register("http_response_body", new(HttpResponseBodyToxic))
+	Register("response_body", new(HttpResponseBodyToxic))
 }

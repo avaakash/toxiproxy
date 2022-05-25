@@ -7,19 +7,18 @@ import (
 	"net/http"
 
 	"github.com/Shopify/toxiproxy/v2/stream"
-	"github.com/Shopify/toxiproxy/v2/toxics/httputils"
 )
 
-type HttpResponseCodeToxic struct {
-	StatusCode int `json:"status_code"`
+type HttpResponseHeaderToxic struct {
+	HeaderKey   string `json:"header_key"`
+	HeaderValue string `json:"header_value"`
 }
 
-func (t *HttpResponseCodeToxic) ModifyResponseCode(resp *http.Response) {
-	httputils.SetHttpStatusCode(resp, t.StatusCode)
-	httputils.SetErrorResponseBody(resp, t.StatusCode)
+func (t *HttpResponseHeaderToxic) ModifyResponseHeader(resp *http.Response) {
+	resp.Header.Set(t.HeaderKey, t.HeaderValue)
 }
 
-func (t *HttpResponseCodeToxic) Pipe(stub *ToxicStub) {
+func (t *HttpResponseHeaderToxic) Pipe(stub *ToxicStub) {
 	buffer := bytes.NewBuffer(make([]byte, 0, 32*1024))
 	writer := stream.NewChanWriter(stub.Output)
 	reader := stream.NewChanReader(stub.Input)
@@ -38,7 +37,7 @@ func (t *HttpResponseCodeToxic) Pipe(stub *ToxicStub) {
 		if err != nil {
 			buffer.WriteTo(writer)
 		} else {
-			t.ModifyResponseCode(resp)
+			t.ModifyResponseHeader(resp)
 			resp.Write(writer)
 		}
 		buffer.Reset()
@@ -46,5 +45,5 @@ func (t *HttpResponseCodeToxic) Pipe(stub *ToxicStub) {
 }
 
 func init() {
-	Register("http_response_code", new(HttpResponseCodeToxic))
+	Register("response_header", new(HttpResponseHeaderToxic))
 }
